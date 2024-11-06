@@ -98,6 +98,7 @@ public class AssignTaskCommand extends Command {
                 throw new CommandException(MESSAGE_INVALID_TASK_DISPLAYED_INDEX);
             }
             Task newTask = lastShownTaskList.get(taskIndex.getZeroBased());
+            newTask.setAssignee(personToEdit);
             if (updatedTasks.contains(newTask)) {
                 throw new CommandException(String.format(MESSAGE_DUPLICATE_TASK,
                         newTask.toString(), personToEdit.getName().toString()));

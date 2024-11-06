@@ -8,6 +8,8 @@ import seedu.address.model.task.Deadline;
 import seedu.address.model.task.Event;
 import seedu.address.model.task.Task;
 
+import javax.swing.text.LabelView;
+
 /**
  * A UI component that displays information of a {@code Task}.
  */
@@ -23,6 +25,8 @@ public class TaskCard extends UiPart<Region> {
     private Label description;
     @FXML
     private Label id;
+    @FXML
+    private Label assignedTo;
     @FXML
     private Label date;
     @FXML
@@ -52,7 +56,7 @@ public class TaskCard extends UiPart<Region> {
         } else if (task instanceof Event) {
             date.setText(("From: " + ((Event) task).getFrom() + " to " + ((Event) task).getTo()));
         }
-
+        assignedTo.setText(task.getAssignee().getName().toString());
         isDone.setText(task.getIsDone() ? "Completed" : "Incomplete");
     }
 
@@ -71,5 +75,7 @@ public class TaskCard extends UiPart<Region> {
     public Label getIsDoneLabel() {
         return isDone;
     }
+
+    public Label getAssignedToLabel() { return assignedTo; }
 }
 

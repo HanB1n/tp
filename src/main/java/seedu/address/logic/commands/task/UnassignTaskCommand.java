@@ -84,6 +84,10 @@ public class UnassignTaskCommand extends Command {
             throw new CommandException(MESSAGE_TASK_NOT_FOUND_IN_CONTACT);
         }
 
+        for (Task tempTask: updatedTasks) {
+            tempTask.setAssignee(null);
+        }
+
         updatedTasks.removeAll(tasksToRemove);
 
         Person editedPerson = PersonTaskEditorUtil.createEditedPersonWithUpdatedTasks(personToEdit, updatedTasks);

@@ -29,6 +29,7 @@ public abstract class JsonAdaptedTask {
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Task's %s field is missing!";
 
     protected final String description;
+    private final String assignedTo;
     protected final boolean isDone;
 
     /**
@@ -39,8 +40,10 @@ public abstract class JsonAdaptedTask {
      */
     @JsonCreator
     public JsonAdaptedTask(@JsonProperty("description") String description,
+                           @JsonProperty("assignedTo") String assignedTo,
                            @JsonProperty("isDone") boolean isDone) {
         this.description = description;
+        this.assignedTo = assignedTo;
         this.isDone = isDone;
     }
 

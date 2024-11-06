@@ -2,6 +2,8 @@ package seedu.address.model.task;
 
 import java.util.Objects;
 
+import seedu.address.model.person.Person;
+
 /**
  * The Task class represents a general task with a description and a completion status.
  * It serves as the base class for more specific types of tasks such as Todo, Deadline, and Event.
@@ -9,6 +11,7 @@ import java.util.Objects;
 public class Task {
     protected Description description;
     protected boolean isDone;
+    private Person assignee;
 
     /**
      * Constructs a Task with the specified description.
@@ -72,6 +75,21 @@ public class Task {
      */
     public void markAsUndone() {
         isDone = false;
+    }
+
+    /**
+     * Sets the assignee to a {@code Vendor}.
+     */
+    public void setAssignee(Person assignee) {
+        this.assignee = assignee;
+    }
+
+    /**
+     * Gets the assigned {@code Vendor}.
+     * @return The assigned Vendor.
+     */
+    public Person getAssignee() {
+        return this.assignee;
     }
 
     /**
