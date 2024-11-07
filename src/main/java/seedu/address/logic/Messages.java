@@ -85,6 +85,7 @@ public class Messages {
             + "the Wedlinker.";
     public static final String MESSAGE_WEDDING_NOT_FOUND_IN_CONTACT = "Some weddings were not found in "
             + "the person's wedding list.";
+    public static final String MESSAGE_WEDDING_ALREADY_ASSIGNED = "Some weddings already have %1$s assigned.";
 
     /**
      * Messages specific to Task
