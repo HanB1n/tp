@@ -17,6 +17,7 @@ import static seedu.address.testutil.TypicalPersons.BOB;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.task.Task;
+import seedu.address.model.task.Todo;
 import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
@@ -32,6 +33,14 @@ public class PersonTest {
         Person person = ALICE;
         Task task = new Task(VALID_TASK_TODO);
         assertFalse(person.hasTask(task));
+    }
+
+    @Test
+    public void getTaskAssigned_returnsSuccessfully() {
+        String taskStr = "todo: buy groceries";
+        Person person = new PersonBuilder().withTasks(taskStr).build();
+        Task newTask = new Todo("buy groceries");
+        assertEquals(person.getTask(newTask), newTask);
     }
     @Test
     public void removeTask_taskAssigned_taskRemovedSuccessfully() {

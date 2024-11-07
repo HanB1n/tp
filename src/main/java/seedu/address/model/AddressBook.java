@@ -260,7 +260,6 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removeTask(Task key) {
         tasks.remove(key);
-        System.out.println(tasks);
     }
 
     /**
@@ -290,6 +289,14 @@ public class AddressBook implements ReadOnlyAddressBook {
     public boolean hasWedding(Wedding wedding) {
         requireNonNull(wedding);
         return weddings.contains(wedding);
+    }
+
+    /**
+     * Returns wedding object with the same name
+     */
+    public Wedding getWedding(Wedding wedding) {
+        requireNonNull(wedding);
+        return weddings.getWedding(wedding);
     }
 
     /**
@@ -325,6 +332,14 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removeTag(Tag key) {
         tags.remove(key);
+    }
+
+    /**
+     * Returns {@code Tag} object with the same {@code TagName}.
+     */
+    public Tag getTag(Tag target) {
+        requireNonNull(target);
+        return tags.getTag(target);
     }
 
     /**
