@@ -3,14 +3,7 @@ package seedu.address.logic.commands.wedding;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.DESC_WEDDING_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.DESC_WEDDING_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_WEDDING_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_WEDDING_CLIVE;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.CommandTestUtil.showWeddingAtIndex;
+import static seedu.address.logic.commands.CommandTestUtil.*;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -34,10 +27,10 @@ import seedu.address.testutil.WeddingBuilder;
  */
 public class EditWeddingCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Wedding editedWedding = new WeddingBuilder().build();
         EditWeddingDescriptor descriptor = new EditWeddingDescriptorBuilder(editedWedding).build();
         EditWeddingCommand editCommand = new EditWeddingCommand(INDEX_FIRST, descriptor);
@@ -53,6 +46,7 @@ public class EditWeddingCommandTest {
 
     @Test
     public void execute_someFieldsSpecifiedUnfilteredList_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Index indexLast = Index.fromOneBased(model.getFilteredWeddingList().size());
         Wedding lastWedding = model.getFilteredWeddingList().get(indexLast.getZeroBased());
 
@@ -78,6 +72,7 @@ public class EditWeddingCommandTest {
 
     @Test
     public void execute_noFieldSpecifiedUnfilteredList_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         EditWeddingCommand editCommand = new EditWeddingCommand(INDEX_FIRST, new EditWeddingDescriptor());
         Wedding editedWedding = model.getFilteredWeddingList().get(INDEX_FIRST.getZeroBased());
 
@@ -91,12 +86,13 @@ public class EditWeddingCommandTest {
 
     @Test
     public void execute_filteredList_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         showWeddingAtIndex(model, INDEX_FIRST);
 
         Wedding weddingInFilteredList = model.getFilteredWeddingList().get(INDEX_FIRST.getZeroBased());
-        Wedding editedWedding = new WeddingBuilder(weddingInFilteredList).withName(VALID_WEDDING_CLIVE).build();
+        Wedding editedWedding = new WeddingBuilder(weddingInFilteredList).withName(VALID_WEDDING_DOMINIC).build();
         EditWeddingCommand editCommand = new EditWeddingCommand(INDEX_FIRST,
-                new EditWeddingDescriptorBuilder().withName(VALID_WEDDING_CLIVE).build());
+                new EditWeddingDescriptorBuilder().withName(VALID_WEDDING_DOMINIC).build());
 
         String expectedMessage = String.format(
                 Messages.MESSAGE_EDIT_WEDDING_SUCCESS, Messages.format(editedWedding));
@@ -109,6 +105,7 @@ public class EditWeddingCommandTest {
 
     @Test
     public void execute_duplicateWeddingUnfilteredList_failure() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Wedding firstWedding = model.getFilteredWeddingList().get(INDEX_FIRST.getZeroBased());
         EditWeddingDescriptor descriptor = new EditWeddingDescriptorBuilder(firstWedding).build();
         EditWeddingCommand editCommand = new EditWeddingCommand(INDEX_SECOND, descriptor);
@@ -118,6 +115,7 @@ public class EditWeddingCommandTest {
 
     @Test
     public void execute_duplicateWeddingFilteredList_failure() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         showWeddingAtIndex(model, INDEX_FIRST);
 
         // edit wedding in filtered list into a duplicate in address book
@@ -130,6 +128,7 @@ public class EditWeddingCommandTest {
 
     @Test
     public void execute_invalidWeddingIndexUnfilteredList_failure() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredWeddingList().size() + 1);
         EditWeddingDescriptor descriptor = new EditWeddingDescriptorBuilder().withName(VALID_WEDDING_BOB).build();
         EditWeddingCommand editCommand = new EditWeddingCommand(outOfBoundIndex, descriptor);
@@ -143,6 +142,7 @@ public class EditWeddingCommandTest {
      */
     @Test
     public void execute_invalidWeddingIndexFilteredList_failure() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         showWeddingAtIndex(model, INDEX_FIRST);
         Index outOfBoundIndex = INDEX_SECOND;
         // ensures that outOfBoundIndex is still in bounds of address book list
@@ -156,6 +156,7 @@ public class EditWeddingCommandTest {
 
     @Test
     public void execute_addressOnlySpecifiedUnfilteredList_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Wedding lastWedding = model.getFilteredWeddingList().get(INDEX_SECOND.getZeroBased());
 
         WeddingBuilder weddingInList = new WeddingBuilder(lastWedding);
@@ -175,12 +176,13 @@ public class EditWeddingCommandTest {
 
     @Test
     public void execute_nameOnlySpecifiedUnfilteredList_success() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Wedding lastWedding = model.getFilteredWeddingList().get(INDEX_FIRST.getZeroBased());
 
         WeddingBuilder weddingInList = new WeddingBuilder(lastWedding);
-        Wedding editedWedding = weddingInList.withName(VALID_WEDDING_CLIVE).build();
+        Wedding editedWedding = weddingInList.withName(VALID_WEDDING_DOMINIC).build();
 
-        EditWeddingDescriptor descriptor = new EditWeddingDescriptorBuilder().withName(VALID_WEDDING_CLIVE).build();
+        EditWeddingDescriptor descriptor = new EditWeddingDescriptorBuilder().withName(VALID_WEDDING_DOMINIC).build();
         EditWeddingCommand editCommand = new EditWeddingCommand(INDEX_FIRST, descriptor);
 
         String expectedMessage = String.format(

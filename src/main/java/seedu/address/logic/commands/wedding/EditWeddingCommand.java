@@ -81,6 +81,7 @@ public class EditWeddingCommand extends Command {
             throw new CommandException(Messages.MESSAGE_DUPLICATE_WEDDING);
         }
 
+
         model.setWedding(weddingToEdit, editedWedding);
         model.updateFilteredWeddingList(PREDICATE_SHOW_ALL_WEDDINGS);
 

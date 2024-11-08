@@ -21,10 +21,10 @@ import seedu.address.model.person.Person;
 import seedu.address.model.wedding.Wedding;
 
 public class DeleteWeddingCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_validDeleteWeddingCommand() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Wedding weddingToDelete = model.getFilteredWeddingList().get(2);
         DeleteWeddingCommand deleteWeddingCommand = new DeleteWeddingCommand(weddingToDelete, true);
 
@@ -57,6 +57,7 @@ public class DeleteWeddingCommandTest {
 
     @Test
     public void execute_invalidNotFoundDeleteWeddingCommand() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Wedding weddingToDelete = model.getFilteredWeddingList().get(0);
 
         String expectedMessage = String.format(Messages.MESSAGE_DELETE_WEDDING_FAILURE_NOT_FOUND,
