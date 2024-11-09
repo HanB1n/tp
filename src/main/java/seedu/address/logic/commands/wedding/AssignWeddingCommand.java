@@ -1,5 +1,10 @@
 package seedu.address.logic.commands.wedding;
 
+import static seedu.address.logic.Messages.MESSAGE_ASSIGN_WEDDING_SUCCESS;
+import static seedu.address.logic.Messages.MESSAGE_FORCE_ASSIGN_WEDDING_TO_CONTACT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
+import static seedu.address.logic.Messages.MESSAGE_WEDDING_ALREADY_ASSIGNED;
+import static seedu.address.logic.Messages.MESSAGE_WEDDING_NOT_FOUND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_WEDDING;
 
 import java.util.HashSet;
@@ -9,7 +14,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -34,6 +38,7 @@ public class AssignWeddingCommand extends Command {
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_WEDDING + "WEDDING [p1/] [p2/] + ... "
             + PREFIX_WEDDING + "WEDDING [p1/] [p2/] (can specify multiple weddings)\n"
+            + "[p1/] and [p2/] can be used to set a person as the first or second partner in a Wedding.\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_WEDDING + "Craig's Wedding " + PREFIX_WEDDING + "Wedding April 2025 p1/.";
 
@@ -63,7 +68,7 @@ public class AssignWeddingCommand extends Command {
         String addedWeddings = weddingsToAdd.keySet().stream()
                 .map(wedding -> wedding.toString().replaceAll("[\\[\\]]", ""))
                 .collect(Collectors.joining(", "));
-        return String.format(Messages.MESSAGE_ASSIGN_WEDDING_SUCCESS, addedWeddings, personToEdit.getName().toString());
+        return String.format(MESSAGE_ASSIGN_WEDDING_SUCCESS, addedWeddings, personToEdit.getName().toString());
     }
 
     @Override
@@ -72,7 +77,7 @@ public class AssignWeddingCommand extends Command {
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(String.format(
-                    Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, 1, lastShownList.size() + 1
+                    MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, 1, lastShownList.size() + 1
             ));
         }
 
@@ -86,19 +91,18 @@ public class AssignWeddingCommand extends Command {
                     CreateWeddingCommand newWeddingCommand = new CreateWeddingCommand(wedding);
                     newWeddingCommand.execute(model);
                 } else {
-                    if (!model.hasWedding(wedding)) {
-                        throw new CommandException(
-                                Messages.MESSAGE_WEDDING_NOT_FOUND +
-                                        "\n" +
-                                        Messages.MESSAGE_FORCE_ASSIGN_WEDDING_TO_CONTACT);
-                    }
-                    // Check if person is already assigned to the wedding
-                    if (model.getWedding(wedding).hasPerson(personToEdit)) {
-                        throw new CommandException(String.format(
-                                Messages.MESSAGE_WEDDING_ALREADY_ASSIGNED, personToEdit.getName()
-                        ));
-                    }
+                    throw new CommandException(
+                            MESSAGE_WEDDING_NOT_FOUND
+                                    + "\n"
+                                    + MESSAGE_FORCE_ASSIGN_WEDDING_TO_CONTACT);
                 }
+            }
+
+            // Check if person is already assigned to the wedding
+            if (model.getWedding(wedding).hasPerson(personToEdit)) {
+                throw new CommandException(String.format(
+                        MESSAGE_WEDDING_ALREADY_ASSIGNED, personToEdit.getName()
+                ));
             }
             Wedding editedWedding = wedding.clone();
             String type = entry.getValue();
