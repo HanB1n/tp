@@ -16,7 +16,6 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Vendor;
 import seedu.address.model.wedding.Wedding;
 
 /**
@@ -30,7 +29,7 @@ public class UnassignWeddingCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes one or multiple weddings from the person identified "
             + "by the index number used in the last person listing.\n"
-            + "Wedding names are case sensitive.\n"
+            + "Wedding names are case insensitive.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_WEDDING + "WEDDING... (can specify multiple weddings)\n"
             + "Example: " + COMMAND_WORD + " 1 "
@@ -67,8 +66,10 @@ public class UnassignWeddingCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        if (index.getZeroBased() >= lastShownList.size() || index.getZeroBased() < 0) {
+            throw new CommandException(String.format(
+                    MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, 1, lastShownList.size()
+            ));
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
@@ -85,28 +86,10 @@ public class UnassignWeddingCommand extends Command {
         if (!updatedWeddings.containsAll(weddingsToRemove)) {
             throw new CommandException(MESSAGE_WEDDING_NOT_FOUND_IN_CONTACT);
         }
+
         updatedWeddings.removeAll(weddingsToRemove);
 
-        Person editedPerson;
-        if (personToEdit instanceof Vendor) {
-            editedPerson = new Vendor(
-                    personToEdit.getName(),
-                    personToEdit.getPhone(),
-                    personToEdit.getEmail(),
-                    personToEdit.getAddress(),
-                    personToEdit.getTags(),
-                    updatedWeddings,
-                    personToEdit.getTasks());
-        } else {
-            editedPerson = new Person(
-                    personToEdit.getName(),
-                    personToEdit.getPhone(),
-                    personToEdit.getEmail(),
-                    personToEdit.getAddress(),
-                    personToEdit.getTags(),
-                    updatedWeddings,
-                    personToEdit.getTasks());
-        }
+        Person editedPerson = PersonWeddingUtil.getNewPerson(personToEdit, updatedWeddings);
 
         // Remove Wedding from Person
         model.setPerson(personToEdit, editedPerson);
@@ -126,10 +109,6 @@ public class UnassignWeddingCommand extends Command {
     public boolean equals(Object other) {
         if (other == this) {
             return true;
-        }
-
-        if (!(other instanceof UnassignWeddingCommand)) {
-            return false;
         }
 
         UnassignWeddingCommand otherCommand = (UnassignWeddingCommand) other;
